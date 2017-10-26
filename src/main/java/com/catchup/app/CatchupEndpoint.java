@@ -2,6 +2,8 @@ package com.catchup.app;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
@@ -22,7 +24,7 @@ import com.catchup.handler.ParseMessage;
 @ServerEndpoint(value="/{user}",encoders=MessageEncoder.class,decoders=ParseMessage.class)
 public class CatchupEndpoint{
 	private static Logger logger = Logger.getLogger(CatchupEndpoint.class);
-	private static HashMap<String, Session> sessions = new HashMap<String,Session>();
+	private static HashMap<String, Session> sessions = new HashMap<String, Session>();
 	
 	@OnOpen
 	public void joinConversation(Session session,@PathParam("user") String user){
@@ -75,6 +77,10 @@ public class CatchupEndpoint{
             Throwable error){
 		sessions.remove(session.getUserProperties().get("user").toString());
 		logger.error("Connection interrupted "+error.getMessage());
+	}
+	
+	public static Set<String> getAll(){
+		return sessions.keySet();
 	}
 
 }

@@ -37,6 +37,7 @@ public class MessageEncoder implements Encoder.Text<Message>{
 		.add("rcontent", message.getrContent())
 		.add("rsender", message.getrSender())
 		.add("rreceived", message.getrReceivedAt())
+		.add("isemo", message.isEmoticon())
 		.build().toString();
 	}
 

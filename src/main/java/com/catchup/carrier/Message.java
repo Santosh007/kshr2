@@ -17,11 +17,12 @@ public class Message {
 	private String rSender;
 	private String rContent;
 	private String rReceivedAt;
+	private boolean isEmoticon;
 	
 	public Message() {
 	}
-	public Message(String messageSender, String messageContent,String rSender,String rContent,String rReceivedAt) {
-		this(messageSender, messageContent, LocalTime.now().toString(),rSender,rContent,rReceivedAt);
+	public Message(String messageSender, String messageContent,String rSender,String rContent,String rReceivedAt,boolean isEmoticon) {
+		this(messageSender, messageContent, LocalTime.now().toString(),rSender,rContent,rReceivedAt,isEmoticon);
 	}
 	/*public Message(String messageSender, String messageContent, String messageReceivedAt) {
 		this.messageSender = messageSender;
@@ -30,13 +31,14 @@ public class Message {
 	}*/
 	
 	public Message(String messageSender, String messageContent, String messageReceivedAt, String rSender,
-			String rContent, String rReceivedAt) {
+			String rContent, String rReceivedAt, boolean isEmoticon) {
 		this.messageSender = messageSender;
 		this.messageContent = messageContent;
 		this.messageReceivedAt = messageReceivedAt;
 		this.rSender = rSender;
 		this.rContent = rContent;
 		this.rReceivedAt = rReceivedAt;
+		this.isEmoticon = isEmoticon;
 	}
 	public String getMessageSender() {
 		return messageSender;
@@ -74,6 +76,12 @@ public class Message {
 	}
 	public void setrReceivedAt(String rReceivedAt) {
 		this.rReceivedAt = rReceivedAt;
+	}
+	public boolean isEmoticon() {
+		return isEmoticon;
+	}
+	public void setEmoticon(boolean isEmoticon) {
+		this.isEmoticon = isEmoticon;
 	}
 	@Override
 	public String toString() {

@@ -102,7 +102,7 @@ big {
 
 /*--------------------------------------------------------------
 Layout
---------------------------------------------------------------*/
+------background: #678bb3;--------------------------------------------------------*/
 body {
     margin: 0;
     padding: 0;
@@ -204,6 +204,7 @@ ul {
     font: 13.3333px Arial;
     text-transform: none;
     display: initial;
+    word-wrap: break-word;
 }
 /*padding: 0.5rem 0.75rem;*/
 ul li {
@@ -311,6 +312,14 @@ button:hover {
 .timer {
     font-size: 3em;
     font-weight: bold;
+}
+
+.buddies{
+	display:inline;
+}
+
+.buddies li{
+	float:left;
 }
 /*--------------------------Emoji area------------------------*/
 .emoji-area{

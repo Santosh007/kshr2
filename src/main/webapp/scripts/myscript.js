@@ -9,6 +9,7 @@ $(document).ready(function(){
 	const leaveButton = $("#leave");
 	const subhead = $(".intro");
 	const audio = $("#msgtone");
+	const logo = $(".masthead");
 	
 	var socket;
 	var isConnected = false;
@@ -45,7 +46,14 @@ $(document).ready(function(){
 			// on message:<div class="receivedtime"></div>
 			socket.onmessage = function(event) {
 				let message = event.data;
+				let msgcontent;
 				let obj = JSON.parse(message);
+				if(obj.isemo){
+					msgcontent = $('<div>').append($faces.find(obj.content).clone()).html();
+				}else{
+					msgcontent = obj.content;
+				}
+				if(obj.content!=null&&obj.content!=""){
 				let liItem = $('<li class="received"></li>');
 				if(obj.rcontent!=null&&obj.rcontent!=""){
 					let rrec = $('<div class="receivedholder"><div><span>'+obj.rsender+'</span></div><div><span class="msgcontent">'+obj.rcontent
@@ -56,7 +64,7 @@ $(document).ready(function(){
 					liItem.append(rec);
 				}else{
 					let html = '<div class="receivedholder"><div><span>'+obj.sender+'</span></div><div><span class="msgcontent">'
-					+ obj.content +'</span><span class="receivedtime">'+obj.received+'</span></div></div>';
+					+ msgcontent +'</span><span class="receivedtime">'+obj.received+'</span></div></div>';
 					liItem.append(html);
 				}
 				/*let html = '<li><div class="received"><div><span>'+obj.sender+'</span></div><div><span class="msgcontent">'
@@ -67,6 +75,11 @@ $(document).ready(function(){
 			    if(document.hidden){ 
 			    	audio[0].play();
 			    }
+			    originText.css('border-color',"#808080");
+			}else{
+				originText.css("border-color","#65CCF3");
+				//originText.delay(2000).css('border-color',"#808080");
+			}
 			};
 			
 			socket.onclose = function(event) {
@@ -93,9 +106,17 @@ $(document).ready(function(){
 	
 	function send(){
 		if(isConnected){
-			let textEnterd = testArea.val().trim();
-			if(textEnterd != ""){
-				var msg = "";
+			let textEnterd;
+			let msgtext;
+			if(arguments[0].isemo){
+				textEnterd = $('<div>').append($faces.find(arguments[0].emoji).clone()).html();
+				msgtext = arguments[0].emoji;
+			}else{
+				textEnterd = testArea.val().trim();
+				msgtext = textEnterd;
+			}
+			var msg = "";
+			if(textEnterd != ""&&!arguments[0].typing){
 				let liItem = $('<li class="sent"></li>');
 				if(replyhtml !== undefined && replyhtml != ""){
 					//replyhtml.removeClass('received').addClass('sentr');
@@ -108,11 +129,11 @@ $(document).ready(function(){
 							+ '</span></div></div>').css('border-radius','0px 0px 10px 10px');
 					liItem.append(sent);
 					replyhtml = '';
-					msg = '{"content":"' + textEnterd + '", "sender":"' + uname + '", "received":"","rcontent":"'+rcontent+'","rsender":"'+rsender+'","rreceived":"'+rreceived+'"}';
+					msg = '{"content":"' + textEnterd + '", "sender":"' + uname + '", "received":"","rcontent":"'+rcontent+'","rsender":"'+rsender+'","rreceived":"'+rreceived+'","isemo":'+arguments[0].isemo+'}';
 				}else{
 					liItem.append('<div class="holder"><div><span>you:</span></div><div><span class="msgcontent">'+textEnterd
 							+ '</span></div></div>');
-					msg = '{"content":"' + textEnterd + '", "sender":"' + uname + '", "received":" ","rcontent":"","rsender":"","rreceived":""}';
+					msg = '{"content":"' + msgtext + '", "sender":"' + uname + '", "received":" ","rcontent":"","rsender":"","rreceived":"","isemo":'+arguments[0].isemo+'}';
 				}
 				socket.send(msg);
 				/*let html = '<li><div class="sent"><div><span>you:</span></div><div><span class="msgcontent">'+textEnterd
@@ -121,6 +142,11 @@ $(document).ready(function(){
 				testArea.val('');
 				let nodes = document.querySelectorAll('.sent');
 			    nodes[nodes.length-1].scrollIntoView();
+			}else{
+				//Check for typing
+				msg = '{"content":"", "sender":"' + uname + '", "received":" ","rcontent":"","rsender":"","rreceived":"","isemo":'+arguments[0].isemo+'}';
+				socket.send(msg);
+				//console.log("Handle typing here");
 			}
 		}else{
 			alert("Please join to send the messages");
@@ -129,7 +155,9 @@ $(document).ready(function(){
 	
 	function enter(event){
 		if (event.keyCode == 13){
-			send();
+			send({'typing':false,'isemo':false,'emoji':""});
+		}else{
+			send({'typing':true,'isemo':false,'emoji':""})
 		}
 	}
 	
@@ -140,15 +168,72 @@ $(document).ready(function(){
 	
 	originText.on('click','li',function() {
 		replyhtml = "";
-		$(this).css('background-color','lightblue');
+		if($(this).css('background-color')=="rgb(173, 216, 230)"){
+			$(this).css('background-color','rgba(0, 0, 0, 0)');
+			replyhtml = "";
+		}else{
+			$(this).css('background-color','lightblue');
+			replyhtml = $(this).children().clone();
+		}
+		
+		
 		//replytxt = $(this).text();
-		replyhtml = $(this).children().clone();
+		
         //alert('Clicked list. ' + $(this).text());
 	});
+	
+	/*function typing(){
+		send();
+	}*/
+	/*function showhide(){
+		$( ".sky" ).toggle();
+		$( ".cloud" ).toggle();
+		$( ".fcloud01" ).toggle();
+		$( ".fcloud02" ).toggle();
+	}*/
+	//Message interpretter
+	function getEmoId(){
+		let emoid = arguments[0].id;
+		return emoid;
+	}
+	
+	function getEmoji(){
+		
+	}
+	
+	/**
+	 * ------------------Emoticon logic---------------------
+	 */
+	$("#emobtn").on('click',showhide);
+
+    function showhide(){
+        $('.dialog').toggle();
+    }
+    
+    var $faces = $('.faces');
+    $faces.find('.face').on('click',sendemoticon);
+
+    function sendemoticon(){
+    	let emoji = "#"+this.id;
+        send({'typing':false,'isemo':true,'emoji':emoji});
+    }
+    
+    /*
+     * let emoji = $('<div>').append($(this).clone()).html();
+    	console.log(this.id);
+    	$('<div>').append($faces.find(emoji).clone()).html()
+    	var emoticon = $faces.find("#"+this.id)
+//    	$faces.find("#"+this.id)
+     * 
+     */
+    
+   //----------------------Emoticon logic end-------------------- 
 	
 	sendButton.on("click",send);
 	joinButton.on("click",join);
 	leaveButton.on("click",leave);
 	testArea.on("keydown",enter);
+	//logo.on("click",showhide);
+	//testArea.on("keyup",typing);
 	
 });

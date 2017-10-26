@@ -35,12 +35,11 @@ public class ParseMessage implements Decoder.Text<Message> {
 		JsonObject jsonObject = Json.createReader(new StringReader(messageString)).readObject();
 		Message message = new Message(jsonObject.getString("sender"), jsonObject.getString("content"),
 				lt.getHour() + ":" + lt.getMinute(), jsonObject.getString("rsender"), jsonObject.getString("rcontent"),
-				jsonObject.getString("rreceived"));
+				jsonObject.getString("rreceived"),jsonObject.getBoolean("isemo"));
 		return message;
 	}
 
 	public boolean willDecode(String arg0) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
