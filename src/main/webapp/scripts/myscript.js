@@ -49,18 +49,20 @@ $(document).ready(function(){
 				let msgcontent;
 				let obj = JSON.parse(message);
 				if(obj.isemo){
-					msgcontent = $('<div>').append($faces.find(obj.content).clone()).html();
+					msgcontent = getEmoji(obj.content);//$('<div>').append($faces.find(obj.content).clone()).html();
 				}else{
 					msgcontent = obj.content;
 				}
 				if(obj.content!=null&&obj.content!=""){
 				let liItem = $('<li class="received"></li>');
 				if(obj.rcontent!=null&&obj.rcontent!=""){
-					let rrec = $('<div class="receivedholder"><div><span>'+obj.rsender+'</span></div><div><span class="msgcontent">'+obj.rcontent
+					let rrmsgcontent = getEmoji(obj.rcontent);
+					let rrec = $('<div class="receivedholder"><div><span>'+obj.rsender+'</span></div><div><span class="msgcontent">'+rrmsgcontent
 							+ '</span><span class="receivedtime">'+obj.rreceived+'</span></div></div>').css({"background-color":"rgba(45, 179, 111, 0.35)","border-radius":"10px 10px 0px 0px"});
 					liItem.append(rrec);
+					let rmsgcontent = getEmoji(obj.content);
 					let rec = $('<div class="receivedholder"><div><span>'+obj.sender+'</span></div><div><span class="msgcontent">'
-							+ obj.content +'</span><span class="receivedtime">'+obj.received+'</span></div></div>').css('border-radius','0px 0px 10px 10px');
+							+ rmsgcontent +'</span><span class="receivedtime">'+obj.received+'</span></div></div>').css('border-radius','0px 0px 10px 10px');
 					liItem.append(rec);
 				}else{
 					let html = '<div class="receivedholder"><div><span>'+obj.sender+'</span></div><div><span class="msgcontent">'
@@ -109,7 +111,7 @@ $(document).ready(function(){
 			let textEnterd;
 			let msgtext;
 			if(arguments[0].isemo){
-				textEnterd = $('<div>').append($faces.find(arguments[0].emoji).clone()).html();
+				textEnterd = getEmoji(arguments[0].emoji);//$('<div>').append($faces.find(arguments[0].emoji).clone()).html();
 				msgtext = arguments[0].emoji;
 			}else{
 				textEnterd = testArea.val().trim();
@@ -122,14 +124,19 @@ $(document).ready(function(){
 					//replyhtml.removeClass('received').addClass('sentr');
 					 let rsender = $(replyhtml.children()[0]).text();
 					 let sec = $(replyhtml.children()[1]);
-					 let rcontent = $(sec.children()[0]).text();
+					 let rcontent;
+					 if(isEmoji(sec)){
+						 rcontent = getEmoId(sec);
+					 }else{
+						 rcontent = $(sec.children()[0]).text();  
+					 }
 					 let rreceived = $(sec.children()[1]).text();
 					liItem.append(replyhtml.removeClass('received').removeClass('receivedholder').addClass('sentr'));
 					let sent = $('<div class="holder"><div><span>you:</span></div><div><span class="msgcontent">'+textEnterd
 							+ '</span></div></div>').css('border-radius','0px 0px 10px 10px');
 					liItem.append(sent);
 					replyhtml = '';
-					msg = '{"content":"' + textEnterd + '", "sender":"' + uname + '", "received":"","rcontent":"'+rcontent+'","rsender":"'+rsender+'","rreceived":"'+rreceived+'","isemo":'+arguments[0].isemo+'}';
+					msg = '{"content":"' + msgtext + '", "sender":"' + uname + '", "received":"","rcontent":"'+rcontent+'","rsender":"'+rsender+'","rreceived":"'+rreceived+'","isemo":'+arguments[0].isemo+'}';
 				}else{
 					liItem.append('<div class="holder"><div><span>you:</span></div><div><span class="msgcontent">'+textEnterd
 							+ '</span></div></div>');
@@ -193,12 +200,25 @@ $(document).ready(function(){
 	}*/
 	//Message interpretter
 	function getEmoId(){
-		let emoid = arguments[0].id;
-		return emoid;
+		let emoid = $( arguments[0] ).find( ".face" )[0].id;
+		//let emoid = arguments[0].id;
+		return '#'+emoid;
 	}
 	
-	function getEmoji(){
-		
+	function getEmoji(id){
+		var element;
+		if ($(id).length) {
+			if($faces.has(id).length){
+				element = $('<div>').append($faces.find(id).clone()).html();
+			}
+		}else{
+			element  = id;
+		}
+		return element;
+	}
+	
+	function isEmoji(elem){
+		return $( elem ).has( ".face" ).length ? true : false;;
 	}
 	
 	/**
