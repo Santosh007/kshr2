@@ -8,6 +8,10 @@
   bottom: 0;
 }
 
+.emotion{
+	
+}
+
 .faces{
     background: rgba(255, 255, 255, 0.9);
     margin: 0 auto;
@@ -62,6 +66,14 @@
   .right_eye{
     position: absolute;
     right: 0px;
+  }
+  
+  .tears{
+  	
+  }
+  
+  .blush{
+  
   }
 
   .graysmile {

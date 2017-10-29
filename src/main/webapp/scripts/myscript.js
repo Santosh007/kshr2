@@ -38,8 +38,9 @@ $(document).ready(function(){
 			socket = new WebSocket(url);
 			socket.onopen = function(event) {
 				subhead.css("background-color","#429890");
-				joinButton.css("visibility","hidden");
-				leaveButton.css("visibility","visible");
+				joinButton.text("Leave");
+				//joinButton.css("visibility","hidden");
+				//leaveButton.css("visibility","visible");
 				isConnected=true;
 			};
 			
@@ -87,8 +88,9 @@ $(document).ready(function(){
 			socket.onclose = function(event) {
 				console.log(JSON.stringify(event));
 				subhead.css("background-color","grey");
-				joinButton.css("visibility","visible");
-				leaveButton.css("visibility","hidden");
+				joinButton.text("Join");
+				//joinButton.css("visibility","visible");
+				//leaveButton.css("visibility","hidden");
 				isConnected=false;
 				if(!byUser){
 					console.log("logged in again..!");
@@ -173,6 +175,17 @@ $(document).ready(function(){
 		socket.close();
 	}
 	
+	function joinleave(){
+		  if(isConnected){
+		    //isConnected = false;
+		    joinButton.text("Join");
+		    leave();
+		  }else{
+		    //isConnected = true;
+		    joinButton.text("Leave");
+		    join();
+		  }
+		}
 	originText.on('click','li',function() {
 		replyhtml = "";
 		if($(this).css('background-color')=="rgb(173, 216, 230)"){
@@ -200,7 +213,7 @@ $(document).ready(function(){
 	}*/
 	//Message interpretter
 	function getEmoId(){
-		let emoid = $( arguments[0] ).find( ".face" )[0].id;
+		let emoid = $( arguments[0] ).find( ".emotion" )[0].id;
 		//let emoid = arguments[0].id;
 		return '#'+emoid;
 	}
@@ -218,7 +231,7 @@ $(document).ready(function(){
 	}
 	
 	function isEmoji(elem){
-		return $( elem ).has( ".face" ).length ? true : false;;
+		return $( elem ).has( ".emotion" ).length ? true : false;;
 	}
 	
 	/**
@@ -231,7 +244,7 @@ $(document).ready(function(){
     }
     
     var $faces = $('.faces');
-    $faces.find('.face').on('click',sendemoticon);
+    $faces.find('.emotion').on('click',sendemoticon);
 
     function sendemoticon(){
     	let emoji = "#"+this.id;
@@ -250,7 +263,7 @@ $(document).ready(function(){
    //----------------------Emoticon logic end-------------------- 
 	
 	sendButton.on("click",send);
-	joinButton.on("click",join);
+	joinButton.on("click",joinleave);
 	leaveButton.on("click",leave);
 	testArea.on("keydown",enter);
 	//logo.on("click",showhide);
