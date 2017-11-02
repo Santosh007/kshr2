@@ -6,16 +6,19 @@ $(document).ready(function(){
 	const sendButton = $("#send");
 	const theTimer = $(".timer");
 	const joinButton = $("#join");
-	const leaveButton = $("#leave");
+	//const leaveButton = $("#leave");
 	const subhead = $(".intro");
 	const audio = $("#msgtone");
 	const logo = $(".masthead");
-	
+	let url = "";
 	var socket;
 	var isConnected = false;
 	var uname;
 	var byUser = false;
 	var replyhtml;
+	
+	var isSkytheme = false;
+	var isRobotheme = false;
 	
 	var hst=  window.location.host;
 	var pth= window.location.pathname;
@@ -23,13 +26,12 @@ $(document).ready(function(){
 	
 	sendButton.css("display","none");
 	joinButton.css("visibility","visible");
-	leaveButton.css("visibility","hidden");
+	//leaveButton.css("visibility","hidden");
 	
 	function join(){
 		uname = userName.val();
 		byUser = false;
 		if(uname != ""){
-			let url = "";
 			if(proto == 'https:'){
 				url = 'wss://'+hst+pth+uname;
 			}else{
@@ -104,6 +106,7 @@ $(document).ready(function(){
 				byUser= true;
 			};
 		}else {
+			joinButton.text("Join");
 			alert("Please enter user name");
 		}	
 	}
@@ -243,6 +246,59 @@ $(document).ready(function(){
         $('.dialog').toggle();
     }
     
+    $("#buddiesbtn").on('click',showbuddies);
+    function showbuddies(){
+    	$.getJSON( window.location+"api/buddies", function( json ) {
+    		  //console.log( "JSON Data: " + json);
+    		  $('#buddies_online .buddies_list li').remove();
+
+    		  $.each(json, function(index,buddy) {
+    			  console.log( "JSON Data: " + buddy.name);
+    			let imgnum = Math.floor(Math.random() * 3) + 1;
+    		    $('#buddies_online .buddies_list').append('<li><div class="grayface bkgrnd_img_'+imgnum+'"></div><div class="msgcontent">'+buddy.name+'</div></li>')
+    		  });
+    		  $('.buddies').toggle();
+    		 });
+      }
+    
+    $("#skytheme").on('click',applysky);
+    
+    function applysky(){
+    	if(isRobotheme){
+    		applyRobo();
+    	}
+    	if(isSkytheme){
+    		$("#topmost").removeClass("sky");
+    		$("#cloudy1").removeClass("cloud fcloud01");
+    		$("#cloudy2").removeClass("cloud fcloud02");
+    		isSkytheme = false;
+    	}else{
+    		$("#topmost").addClass( "sky" );
+    		$("#cloudy1").addClass("cloud fcloud01");
+    		$("#cloudy2").addClass("cloud fcloud02");
+    		isSkytheme = true;
+    	}
+    }
+    
+    $('#robotheme').on('click',applyRobo);
+    
+    function applyRobo(){
+    	if(isSkytheme){
+    		applysky();
+    	}
+    	if(isRobotheme){
+    		$("#topmost").removeClass("space");
+    		$("#cloudy1").removeClass("wrapper");
+    		$("#cloudy1 img:last-child").remove()
+    		isRobotheme = false;
+    	}else{
+    		$("#topmost").addClass( "space" );
+    		$("#cloudy1").addClass("wrapper");
+    		$("#cloudy1").append('<img src="img/tall_robot.svg" width="150" alt="tall robot" class="robot" />');
+    		isRobotheme = true;
+    	}
+    }
+    
     var $faces = $('.faces');
     $faces.find('.emotion').on('click',sendemoticon);
 
@@ -264,7 +320,7 @@ $(document).ready(function(){
 	
 	sendButton.on("click",send);
 	joinButton.on("click",joinleave);
-	leaveButton.on("click",leave);
+	//leaveButton.on("click",leave);
 	testArea.on("keydown",enter);
 	//logo.on("click",showhide);
 	//testArea.on("keyup",typing);

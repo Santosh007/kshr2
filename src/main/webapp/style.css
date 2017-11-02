@@ -109,7 +109,7 @@ body {
 }
 
 .masthead {
-    padding: 1em 1em;
+    padding: .1em .1em;
     background-color: #0D1B2E;
     color: white;
 }
@@ -123,6 +123,36 @@ body {
     color: #ffffff;
     background: grey;
     text-align: center;
+}
+
+#buddiesbtn{
+  float: right;
+  display: inline-flex;
+  width: 106px;
+  height: 54px;
+  border: 2px solid gray;
+  border-radius: 50px 50px 50px;
+  background: #86b32d;
+}
+
+#skytheme{
+  float: left;
+  display: inline-flex;
+  width: 80px;
+  height: 50px;
+  border: 2px solid gray;
+  border-radius: 50px 50px 50px;
+  background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%);
+}
+
+#robotheme{
+	float: left;
+  display: inline-flex;
+  width: 80px;
+  height: 50px;
+  border: 2px solid gray;
+  border-radius: 50px 50px 50px;
+  background-image: linear-gradient( 135deg, #3B2667 10%, #BC78EC 100%);	
 }
 
 /*------------------------------------------------*/
@@ -272,8 +302,11 @@ button:hover {
 }
 /*padding: 0 2em;*/
 .test-area {
+    display: inline-block;
     margin-bottom: 4em;
     padding: 0 2em;
+    width: 50%;
+    margin-left: 26%;;
 }
 
 .test-wrapper {
@@ -314,19 +347,58 @@ button:hover {
     font-weight: bold;
 }
 
-.buddies{
+/* .buddies{
 	display:inline;
-}
+}*/
 
-.buddies li{
-	float:left;
+.buddies ul{
+	height:17.5em;
 }
+.buddies li{
+	background: #FFFFFF;
+    color: #0d1b2e;
+    width: 85%;
+	display: inline-block;
+    border-radius: 50px;
+    margin: 10px;
+    box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.08), 0px 6px 18px 0px rgba(0, 0, 0, 0.05);
+    transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0px);
+    font-family: 'Source Sans Pro', sans-serif;
+} 
 /*--------------------------Emoji area------------------------*/
 .emoji-area{
 	max-width: 200px;
 	border: 5px solid grey;
     border-radius: 10px;
     float: right;
+}
+
+/*---box-shadow: 1px 1px 2px 0.4px black inset;---*/
+.buddies {
+  position:fixed;
+  display:none;
+  background-color:#eee;
+  border-radius: 10px;
+  border: 5px solid gray;
+  box-sizing:border-box;
+  float:right;
+  height:18em;
+  margin:.8em 0em .5em .5em;
+  padding:1em;
+  position:relative;
+  width:20em;
+  z-index: 1;
+  animation: slideleft .8s linear;
+}
+
+@keyframes slideleft {
+  0% {
+    width:5em;
+  }
+  100% {
+    width:20em;
+  }
 }
 /* #join {
     padding: .5em 1em;

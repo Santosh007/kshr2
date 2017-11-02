@@ -16,7 +16,7 @@ import com.catchup.handler.BuddyFinder;
 public class CatchupAPI{
 	
 	@GET
-	@Produces(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllBuddies(){
 		BuddyFinder finder = new BuddyFinder();
 		List<Buddy> buddies = finder.getAllBuddies();

@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="css/emoji.css">
 <link rel="stylesheet" href="css/emoticon.css">
 <link rel="stylesheet" href="css/clouds.css">
+<link rel="stylesheet" href="css/robot.css">
 </head>
 
 <body>
@@ -25,14 +26,28 @@
 	</header>
 	<main class="main">
 	<div class="intro">
+		<div id="skytheme"></div>
+		<div id="robotheme"></div>
 		<input id="user-name" name="username" placeholder="User Name"></input>
 		<button id="join" type="submit">Join</button>
-		<button id="leave" type="submit">Leave</button>
-		<!-- <ul class="buddies">
-			<li>one</li>
-			<li>two</li>
-		</ul> -->
-	</div>
+		<!-- <button id="leave" type="submit">Leave</button> -->
+		<div id="buddiesbtn">
+				<div class="grayface" style="background: rgba(255, 255, 255, 0.9);">
+					<div class="eyes">
+						<div class="eye left_eye"></div>
+						<div class="eye right_eye"></div>
+					</div>
+					<div class="graysmile"></div>
+				</div>
+				<div class="grayface" style="background: rgba(255, 255, 255, 0.9);">
+					<div class="eyes">
+						<div class="eye left_eye"></div>
+						<div class="eye right_eye"></div>
+					</div>
+					<div class="graysmile"></div>
+				</div>
+			</div>
+		</div>
 	<!-- <div class="sky">
 	</div> -->
 	<!-- .intro -->
@@ -40,6 +55,8 @@
 		<!-- <div id="status">Connecting...</div> -->
 		<!-- <div class="cloud fcloud01"></div>
 		<div class="cloud fcloud02"></div> -->
+		<div id="cloudy1"></div>
+		<div id="cloudy2"></div>
 		<ul id="origin-text"></ul>
 
 		<div class="test-wrapper">
@@ -106,6 +123,12 @@
                                 <div class='sad'></div>
                         </div>
                 </div>
+        </section>
+        <section class="buddies">
+        	<div id="buddies_online">
+        		<ul class="buddies_list">
+        		</ul>
+        	</div>
         </section>
 	</main>
 	<audio id="msgtone" src="isnt-it.mp3" preload="auto"></audio>
